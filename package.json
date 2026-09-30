@@ -26,8 +26,6 @@
         "typescript": "^7.0.2"
     },
     "allowScripts": {
-        "tsx@4.23.15": true,
-        "typescript@7.0.2": true,
         "esbuild@0.28.2": true,
         "@modelcontextprotocol/inspector@2.8.0": true
     }
