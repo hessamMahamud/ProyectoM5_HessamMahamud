@@ -1,0 +1,65 @@
+# ───────── Sistema ─────────
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+.Trash-*
+.Trashes
+.Spotlight-V100
+
+# ───────── Sincronización ─────────
+.syncthing.*
+.sync-conflict-*
+*.sync-conflict-*
+
+# ───────── Archivos ocultos comunes ─────────
+.fuse_hidden
+.directory
+
+# ───────── Editores ─────────
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ───────── Logs ─────────
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ───────── Node / Build ─────────
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# ───────── React / JS ─────────
+*.env
+.env.*
+coverage/
+*.cache
+.next/
+out/
+build/
+
+# ───────── Antigravity ─────────
+.antigravity/
+.antigravity-cache/
+.antigravity-temp/
+
+# ───────── Otros ─────────
+*.tmp
+*.bak
+*.old
+src/docs/Screenshot From 2026-09-28 09-21-18.png
