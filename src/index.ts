@@ -8,7 +8,7 @@ const server = new McpServer({
 });
 
 async function main() {
-    registerPing(server)
+    registerPing(server);
 
     await server.connect(new StdioServerTransport());
     console.error("[mcp] server running");
