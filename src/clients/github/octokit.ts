@@ -1,5 +1,5 @@
 import { Octokit } from "@octokit/rest";
-import { env } from "../../config/env";
+import { env } from "../../config/env.js";
 
 export function createOctokit() {
     return new Octokit({
