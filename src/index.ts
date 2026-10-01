@@ -1,8 +1,10 @@
+/*----< Libraries >----*/
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerPing } from "./tools/ping.js";
 import { Octokit } from "@octokit/rest"
 import * as dotenv from "dotenv"
+/*----< Tools >----*/
 import { listRepos } from "./tools/listRepos.js";
 import { getRepo } from "./tools/getRepo.js";
 import { createIssue } from "./tools/createIssue.js";
