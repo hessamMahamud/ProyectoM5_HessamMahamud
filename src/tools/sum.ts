@@ -5,11 +5,11 @@ export function registerSum(server: McpServer) {
     server.registerTool(
         "sum",
         {
-            description: "Una tool para sumar (a + b)",
-            inputSchema: {}
+            description: "Returns the sum of two numbers",
+            inputSchema: { a: zod.number(), b: zod.number() },
         },
-        async ({}) => ({
-            content: [],
+        async ({ a, b }) => ({
+            content: [{ type: "text", text: String(a + b) }],
         }),
     );
 }
