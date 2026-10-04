@@ -1,8 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { registerPing } from "./tools/ping.js";
-import { registerSum } from "./tools/sum.js";
-import { registerSlugify } from "./tools/slugify.js";
+import { registerAllTools } from "./tools/index.js";
 
 const server = new McpServer({
     name: "hessMahBu-agent",
@@ -10,9 +8,7 @@ const server = new McpServer({
 });
 
 async function main() {
-    registerPing(server);
-    registerSum(server);
-    registerSlugify(server);
+    registerAllTools(server);
 
     await server.connect(new StdioServerTransport());
     console.error("[mcp] server running");
