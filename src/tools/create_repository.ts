@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 
 const inputSchema = z.object({
     name: z.string()
@@ -8,6 +8,7 @@ const inputSchema = z.object({
         .regex(/^[a-zA-Z0-9\-]+$/, "Sólo se permiten letras números y guiones (.)"),
     description: z.string().max(255).optional(),
     private: z.boolean().optional().default(false),
+    gitignore_template: z.string().optional(),
 });
 
 export function registerCreateRepository(server: McpServer) {
