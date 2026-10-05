@@ -1,5 +1,5 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
-import { registerCreateRepository } from "./create_repository.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { registerCreateRepository } from "./github/create_repository.js";
 import { registerPing } from "./ping.js";
 import { registerSum } from "./sum.js";
 import { registerSlugify } from "./slugify.js";
