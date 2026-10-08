@@ -33,27 +33,31 @@ export class GitHubRateLimitError extends GitHubError {
 
 export class GitHubNotFoundError extends GitHubError {
     constructor() {
-        super("Recurso no encontrado (404). Verifica el owner, repo o que el token tenga acceso.", 404 );
+        super("Recurso no encontrado (404). Verifica el owner, repo o que el token tenga acceso.", 404);
         this.name = "GitHubNotFoundError"
     }
 }
 
 export class GitHubValidationError extends GitHubError {
     constructor(message: string, public details?: unknown) {
-        super(message, 422 );
+        super(message, 422);
         this.name = "GitHubValidationError"
     }
 }
 
 export class GitHubServerError extends GitHubError {
     constructor(status: number) {
-        super(`Error interno de GitHub (${status}). Se puede resolver reintentando`, status );
+        super(`Error interno de GitHub (${status}). Se puede resolver reintentando`, status);
         this.name = "GitHubServerError"
     }
 }
 
 export function readRateLimit(headers: Record<string, unknown>): RateLimitInfo {
-
+    return {
+        limit: Number(headers["x-ratelimit-limit"] ?? 0),
+        remaining: Number(headers["x-ratelimit-remaining"] ?? -1),
+        resetEpochSeconds: Number(headers["x-ratelimit-reset"] ?? 0),
+    };
 }
 
 export function mapGitHubError(error: any): GitHubError {
@@ -63,7 +67,7 @@ export function mapGitHubError(error: any): GitHubError {
     if (status === 401) return new GitHubAuthError();
 
     if (status === 403 || status === 429) {
-        if (rl.remaining === 0 || status === 429){
+        if (rl.remaining === 0 || status === 429) {
             return new GitHubRateLimitError(rl.resetEpochSeconds);
         }
         return new GitHubForbiddenError();
