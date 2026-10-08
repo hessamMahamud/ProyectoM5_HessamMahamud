@@ -6,7 +6,7 @@ import {
 } from "./errors.js";
 
 export const githubRequest = async<T>(
-    op: () => Promise<{ data: T; headers: Record<string, unknown>}>,
+    op: () => Promise<{ data: T; headers: Record<string, unknown> }>,
     attempt = 0,
 ): Promise<T> => {
 
