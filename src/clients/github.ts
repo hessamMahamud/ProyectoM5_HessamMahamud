@@ -15,8 +15,8 @@ export class GithubClient {
         this.octokit = octokit;
     }
 
-    async function verifyAuth() {
-        const { data } = await this.octokit.rest.user.getAuthenticated();
+    async verifyAuth() {
+        const { data } = await this.octokit.rest.users.getAuthenticated();
         return {
             login: data.login,
             name: data.name,
