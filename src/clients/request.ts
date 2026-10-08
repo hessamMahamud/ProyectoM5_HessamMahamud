@@ -1,54 +1,42 @@
-import { GitHubError, toGitHubError } from "./errors.js";
+import {
+    readRateLimit,
+    mapGitHubError,
+    GitHubRateLimitError,
+    GitHubServerError,
+} from "./errors.js";
 
-export type ApiResult<T> =
-    | { ok: true; data: T }
-    | { ok: false; error: { message: string; status: number; code: string } };
+export const githubRequest = async<T>(
+    op: () => Promise<{ data: T; headers: Record<string, unknown>}>,
+    attempt = 0,
+) Promise<T> => {
+    try {
+        const res = await op();
+        const rl = readRateLimit(res.headers);
+        console.error(`[GH RateLimit] remaining: ${rl.remaining}/${rl.limit}`);
+        return res.data;
 
-export interface RetryOptions {
-    maxRetries?: number;
-    baseDelayMs?: number;
+    } catch (error) {
+        const err = mapGitHubError(error);
+
+        if (error instanceof GitHubRateLimitError && attempt === 0) {
+            await delayUntilReset(error.resetEpochSeconds);
+            return githubRequest(op, attempt + 1);
+        }
+
+        if (error instanceof GitHubServerError && attempt < 2) {
+            const delay = 1000 * 2 ** attempt;
+            console.error(`[GH] Error ${error.status}, reintentando en ${delay / 1000}s...`,);
+            await new Promise((r) => setTimeout(r, delay));
+            return githubRequest(op, attempt + 1);
+        }
+
+        throw error;
+    };
 }
 
-const DEFAULTS: Required<RetryOptions> = {
-    maxRetries: 3,
-    baseDelayMs: 500,
-};
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-export async function githubRequest<T>(
-    operation: () => Promise<T>,
-    options: RetryOptions = {},
-): Promise<ApiResult<T>> {
-    const { maxRetries, baseDelayMs } = { ...DEFAULTS, ...options };
-
-    let lastError: GitHubError | null = null;
-
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-        try {
-            const data = await operation();
-            return { ok: true, data };
-        } catch (error) {
-            lastError = toGitHubError(error);
-
-            const isLastAttempt = attempt === maxRetries;
-            if (!lastError.retryable || isLastAttempt) break;
-
-            const delay = baseDelayMs * 2 ** attempt + Math.random() * 250;
-            console.warn(
-                `Intento ${attempt + 1}/${maxRetries} falló (${lastError.status}). ` +
-                `Reintentando en ${Math.round(delay)}ms...`,
-            );
-            await sleep(delay);
-        }
-    }
-
-    return {
-        ok: false,
-        error: {
-            message: lastError!.message,
-            status: lastError!.status,
-            code: lastError!.code,
-        },
-    };
+export const delayUntilReset = async (resetEpochSeconds: number) => {
+    const now = Math.floor(Date.now() / 1000);
+    const delay = Math.max(0, resetEpochSeconds - now) * 1000 + 1000;
+    console.error(`[GH] Rate limit alcanzado, reintentando en ${delay / 1000}s`);
+    await new Promise((r) => setTimeout(r, delay));
 }

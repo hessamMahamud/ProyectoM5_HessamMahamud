@@ -3,21 +3,11 @@ import { RequestError } from "@octokit/request-error";
 export class GitHubError extends Error {
     constructor(
         message: string,
-        public readonly status: number,
-        public readonly code: GitHubErrorCode,
-        public readonly retryable: boolean,
+        public status?: number,
     ) {
         super(message);
         this.name = "GitHubError";
-    } /**
-  {
-  name
-  message
-  status
-  code
-  retryable
-  }
-  */
+    }
 }
 
 export type GitHubErrorCode =
