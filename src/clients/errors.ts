@@ -74,7 +74,7 @@ export function mapGitHubError(error: any): GitHubError {
     };
 
     if (status === 404) return new GitHubNotFoundError();
-
+    
     if (status === 422) {
         return new GitHubValidationError("Input inválido (422). Probablemente falte un campo requerido como el título.", error?.response?.data?.errors ?? error?.errors);
     };
