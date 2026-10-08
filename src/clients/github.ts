@@ -24,3 +24,5 @@ export class GithubClient {
         };
     };
 }
+
+// faltan funciones
