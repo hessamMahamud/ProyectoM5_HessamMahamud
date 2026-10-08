@@ -10,6 +10,76 @@ export class GitHubError extends Error {
     }
 }
 
+export class GitHubAuthError extends GitHubError {
+    constructor() {
+        super("Token ausente, inválido o expirado (401). Revisa GITHUB_TOKEN en .env,", 401);
+        this.name = "GitHubAuthError";
+    }
+}
+
+export class GitHubForbiddenError extends GitHubError {
+    constructor() {
+        super("Permisos insuficientes (403). El token no tiene los scopes necesarios.", 403)
+        this.name = "GitHubForbiddenError"
+    }
+}
+
+export class GitHubRateLimitError extends GitHubError {
+    constructor(public resetEpochSeconds: number) {
+        super("Rate limit excedido. Hay que esperar hasta el reset para reintentar.", 403)
+        this.name = "GitHubRateLimitError"
+    }
+}
+
+export class GitHubNotFoundError extends GitHubError {
+    constructor() {
+        super("Recurso no encontrado (404). Verifica el owner, repo o que el token tenga acceso.", 404 );
+        this.name = "GitHubNotFoundError"
+    }
+}
+
+export class GitHubValidationError extends GitHubError {
+    constructor(message: string, public details?: unknown) {
+        super(message, 422 );
+        this.name = "GitHubValidationError"
+    }
+}
+
+export class GitHubServerError extends GitHubError {
+    constructor(status: number) {
+        super(`Error interno de GitHub (${status}). Se puede resolver reintentando`, status );
+        this.name = "GitHubServerError"
+    }
+}
+
+export function readRateLimit(headers: Record<string, unknown>): RateLimitInfo {
+
+}
+
+export function mapGitHubError(error: any): GitHubError {
+    const status: number | undefined = error?.status;
+    const rl = readRateLimit(error?.response?.headers ?? {});
+
+    if (status === 401) return new GitHubAuthError();
+
+    if (status === 403 || status === 429) {
+        if (rl.remaining === 0 || status === 429){
+            return new GitHubRateLimitError(rl.resetEpochSeconds);
+        }
+        return new GitHubForbiddenError();
+    };
+
+    if (status === 404) return new GitHubNotFoundError();
+
+    if (status === 422) {
+        return new GitHubValidationError("Input inválido (422). Probablemente falte un campo requerido como el título.", error?.response?.data?.errors ?? error?.errors);
+    };
+
+    if (status && status >= 500) return new GitHubServerError(status);
+
+    return new GitHubError(error?.message ?? "Error desconocido", status);
+}
+
 export type GitHubErrorCode =
     | "UNAUTHORIZED"
     | "RATE_LIMITED"
@@ -18,72 +88,3 @@ export type GitHubErrorCode =
     | "VALIDATION"
     | "SERVER_ERROR"
     | "UNKNOWN";
-
-export function toGitHubError(error: unknown): GitHubError {
-    if (error instanceof RequestError) {
-        const status = error.status;
-
-        if (status === 401) {
-            return new GitHubError(
-                "Token inválido o expirado (401). Verificá GITHUB_TOKEN en tu .env y que el token siga activo en GitHub.",
-                status,
-                "UNAUTHORIZED",
-                false,
-            );
-        }
-
-        if (status === 403 || status === 429) {
-            const remaining = error.response?.headers?.["x-ratelimit-remaining"];
-            if (remaining === "0" || status === 429) {
-                const reset = error.response?.headers?.["x-ratelimit-reset"];
-                const resetAt = reset
-                    ? new Date(Number(reset) * 1000).toLocaleTimeString()
-                    : "desconocido";
-                return new GitHubError(
-                    `Rate limit excedido (${status}). La cuota se renueva a las ${resetAt}. Reducí la frecuencia de requests o usá paginación más agresiva.`,
-                    status,
-                    "RATE_LIMITED",
-                    true,
-                );
-            }
-            return new GitHubError(
-                "Acceso prohibido (403). El token no tiene permisos suficientes para esta operación (revisá los scopes).",
-                status,
-                "FORBIDDEN",
-                false,
-            );
-        }
-
-        if (status === 404) {
-            return new GitHubError(
-                "Recurso no encontrado (404). Verificá owner/repo, o que el token tenga acceso a ese repositorio privado.",
-                status,
-                "NOT_FOUND",
-                false,
-            );
-        }
-
-        if (status === 422) {
-            return new GitHubError(
-                `Datos inválidos (422): ${error.message}`,
-                status,
-                "VALIDATION",
-                false,
-            );
-        }
-
-        if (status >= 500) {
-            return new GitHubError(
-                `Error transitorio del servidor de GitHub (${status}). Suele resolverse reintentando.`,
-                status,
-                "SERVER_ERROR",
-                true,
-            );
-        }
-
-        return new GitHubError(error.message, status, "UNKNOWN", false);
-    }
-
-    const message = error instanceof Error ? error.message : String(error);
-    return new GitHubError(message, 0, "UNKNOWN", false);
-}

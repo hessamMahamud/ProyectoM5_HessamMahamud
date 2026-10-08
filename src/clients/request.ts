@@ -5,10 +5,18 @@ import {
     GitHubServerError,
 } from "./errors.js";
 
+export const delayUntilReset = async (resetEpochSeconds: number) => {
+    const now = Math.floor(Date.now() / 1000);
+    const delay = Math.max(0, resetEpochSeconds - now) * 1000 + 1000;
+    console.error(`[GH] Rate limit alcanzado, reintentando en ${delay / 1000}s`);
+    await new Promise((r) => setTimeout(r, delay));
+}
+
 export const githubRequest = async<T>(
     op: () => Promise<{ data: T; headers: Record<string, unknown>}>,
     attempt = 0,
-) Promise<T> => {
+): Promise<T> => {
+
     try {
         const res = await op();
         const rl = readRateLimit(res.headers);
@@ -32,11 +40,4 @@ export const githubRequest = async<T>(
 
         throw error;
     };
-}
-
-export const delayUntilReset = async (resetEpochSeconds: number) => {
-    const now = Math.floor(Date.now() / 1000);
-    const delay = Math.max(0, resetEpochSeconds - now) * 1000 + 1000;
-    console.error(`[GH] Rate limit alcanzado, reintentando en ${delay / 1000}s`);
-    await new Promise((r) => setTimeout(r, delay));
 }
