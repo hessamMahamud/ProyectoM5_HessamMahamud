@@ -78,7 +78,7 @@ MCP (Model Context Protocol) es un estándar abierto (open-source) creado en Ant
 - **Integración:** el host crea un client por cada server; el client negocia capacidades con su server y le envía las solicitudes; el server responde; y las interacciones entre distintos servers pasan siempre por el host.
 
 ```mermaid
-graph LR
+graph TD
   U[Usuario] --> H
   subgraph HOST[Host: app de IA con LLM]
     H[Host] --> C1[Client 1]
