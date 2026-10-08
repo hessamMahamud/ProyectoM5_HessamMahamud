@@ -92,3 +92,5 @@ export type GitHubErrorCode =
     | "VALIDATION"
     | "SERVER_ERROR"
     | "UNKNOWN";
+
+// Falta un dato ver video clase 2026-10-05 minuto aproximado 30:00 - 35:00
