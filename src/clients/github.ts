@@ -25,12 +25,16 @@ export class GithubClient {
         };
     };
 
-    async createRepository(name: string, description?: string, isPrivate: boolean = false): Promise<Repository> {
+    async createRepository(
+        name: string,
+        description?: string,
+        isPrivate: boolean = false,
+    ): Promise<Repository> {
         const data = await githubRequest(() => this.octokit.repos.createForAuthenticatedUser({
-           name,
-           ...(description !== undefined && { description }),
-           private: isPrivate,
-           auto_init: true,
+            name,
+            ...(description !== undefined && { description }),
+            private: isPrivate,
+            auto_init: true,
         }));
 
         return {
@@ -47,7 +51,9 @@ export class GithubClient {
         sort: "created" | "updated" | "pushed" | "full_name" = "updated",
         per_page: number = 3,
     ): Promise<Repository[]> {
-        const data = await githubRequest(() => this.octokit.repos.listForAuthenticatedUser({ type, sort, per_page }));
+        const data = await githubRequest(() =>
+            this.octokit.repos.listForAuthenticatedUser({ type, sort, per_page })
+        );
 
         return data.map((repo) => ({
             fullName: repo.full_name,

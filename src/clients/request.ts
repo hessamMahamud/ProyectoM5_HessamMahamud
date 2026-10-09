@@ -20,8 +20,8 @@ export const githubRequest = async<T>(
         const err = mapGitHubError(error);
 
         if (err instanceof GitHubRateLimitError && attempt === 0) {
-            await delayUntilReset(err.resetEpochSeconds);
-            return githubRequest(operation, attempt + 1);
+            await delayUntilReset(err.resetEpochSeconds); // 10sec
+            return githubRequest(operation, attempt + 1); // octokit
         }
 
         if (err instanceof GitHubServerError && attempt < 2) {
