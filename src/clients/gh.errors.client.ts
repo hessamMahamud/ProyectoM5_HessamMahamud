@@ -76,9 +76,15 @@ export function readRateLimit(headers: Record<string, unknown>) {
     };
 }
 
-export function mapGitHubError(error: any): GitHubError {
-    const status: number | undefined = error?.status;
-    const rl = readRateLimit(error?.response?.headers ?? {});
+export function mapGitHubError(error: unknown): GitHubError {
+    const candidate = error as {
+        status?: number;
+        message?: string;
+        response?: { headers?: Record<string, unknown>; data?: { errors?: unknown } };
+        errors?: unknown;
+    } | null;
+    const status: number | undefined = candidate?.status;
+    const rl = readRateLimit(candidate?.response?.headers ?? {});
 
     if (status === 401) return new GitHubAuthError();
 
@@ -95,13 +101,13 @@ export function mapGitHubError(error: any): GitHubError {
     if (status === 422) {
         return new GitHubValidationError(
             "Input inválido (422). Probablemente falte un campo requerido como el título.",
-            error?.response?.data?.errors ?? error?.errors,
+            candidate?.response?.data?.errors ?? candidate?.errors,
         );
     };
 
     if (status && status >= 500) return new GitHubServerError(status);
 
-    return new GitHubError(error?.message ?? "Error desconocido", status);
+    return new GitHubError(candidate?.message ?? "Error desconocido", status);
 }
 
 export type GitHubErrorCode =
@@ -112,5 +118,3 @@ export type GitHubErrorCode =
     | "VALIDATION"
     | "SERVER_ERROR"
     | "UNKNOWN";
-
-// Falta un dato ver video clase 2026-10-05 minuto aproximado 30:00 - 35:00

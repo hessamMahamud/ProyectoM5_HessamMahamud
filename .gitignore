@@ -1,4 +1,4 @@
-# ───────── Sistema ─────────
+# -------- Sistema --------
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -7,16 +7,16 @@ ehthumbs.db
 .Trashes
 .Spotlight-V100
 
-# ───────── Sincronización ─────────
+# -------- Sincronización --------
 .syncthing.*
 .sync-conflict-*
 *.sync-conflict-*
 
-# ───────── Archivos ocultos comunes ─────────
+# -------- Archivos ocultos comunes --------
 .fuse_hidden
 .directory
 
-# ───────── Editores ─────────
+# -------- Editores --------
 .vscode/
 !.vscode/extensions.json
 .idea/
@@ -29,7 +29,7 @@ ehthumbs.db
 *.sln
 *.sw?
 
-# ───────── Logs ─────────
+# -------- Logs --------
 logs
 *.log
 npm-debug.log*
@@ -38,13 +38,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# ───────── Node / Build ─────────
+# -------- Node / Build --------
 node_modules/
 dist/
 dist-ssr/
 *.local
 
-# ───────── React / JS ─────────
+# -------- React / JS --------
 *.env
 .env.*
 !.env.example
@@ -54,13 +54,20 @@ coverage/
 out/
 build/
 
-# ───────── Antigravity ─────────
+# -------- Antigravity --------
 .antigravity/
 .antigravity-cache/
 .antigravity-temp/
 
-# ───────── Otros ─────────
+# -------- Otros --------
 *.tmp
 *.bak
 *.old
-src/docs/Screenshot From 2026-09-28 09-21-18.png
+docs/20260929150313.md
+docs/prompt.json
+docs/schema.json
+docs/Screenshot From 2026-09-28 09-21-18.png
+
+# -------- Agents --------
+.agents/
+.codex/

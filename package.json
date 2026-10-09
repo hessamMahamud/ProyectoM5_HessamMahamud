@@ -8,7 +8,7 @@
         "build": "tsc -p tsconfig.json",
         "start": "node dist/index.js",
         "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "vitest run"
+        "test": "vitest run src/tests"
     },
     "keywords": [],
     "author": "",
@@ -29,7 +29,6 @@
     },
     "allowScripts": {
         "esbuild@0.28.2": true,
-        "@anthropic-ai/claude-code@2.1.295": true,
         "@modelcontextprotocol/inspector@2.10.1": true
     }
 }

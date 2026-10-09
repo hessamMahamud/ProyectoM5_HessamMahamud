@@ -3,7 +3,7 @@ import {
     mapGitHubError,
     GitHubRateLimitError,
     GitHubServerError,
-} from "./errors.js";
+} from "./gh.errors.client.js";
 
 export const githubRequest = async<T>(
     operation: () => Promise<{ data: T; headers: Record<string, unknown> }>,
