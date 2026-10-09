@@ -63,4 +63,10 @@ build/
 *.tmp
 *.bak
 *.old
-docs/
+docs/20260929150313.md
+docs/prompt.json
+docs/resume.md
+docs/schema.json
+docs/Screenshot From 2026-09-28 09-21-18.png
+.agents/
+.codex/
