@@ -29,6 +29,7 @@
     },
     "allowScripts": {
         "esbuild@0.28.2": true,
-        "@modelcontextprotocol/inspector@2.8.0": true
+        "@anthropic-ai/claude-code@2.1.295": true,
+        "@modelcontextprotocol/inspector@2.10.1": true
     }
 }
