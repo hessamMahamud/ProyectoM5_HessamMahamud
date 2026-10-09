@@ -3,7 +3,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { registerAllTools } from "./tools/index.js";
 
 const server = new McpServer({
-    name: "hessMahBu-agent",
+    name: "AutomateHub",
     version: "0.1.0",
 });
 
