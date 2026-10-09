@@ -1,15 +1,8 @@
 import * as z from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-
-const inputSchema = z.object({
-    name: z.string()
-        .min(1, "El nombre no puede estar vacío")
-        .max(100, "Máximo 100 caracteres")
-        .regex(/^[a-zA-Z0-9\-]+$/, "Sólo se permiten letras números y guiones (.)"),
-    description: z.string().max(255).optional(),
-    private: z.boolean().optional().default(false),
-    gitignore_template: z.string().optional(),
-});
+import { createRepositoryOutputSchema, createRepositorySchema } from "../../schemas/repositories.schema.js";
+import { GithubClient } from "../../clients/github.client.js";
+import { toToolError } from "./result.js";
 
 export function registerCreateRepository(server: McpServer) {
     server.registerTool(
