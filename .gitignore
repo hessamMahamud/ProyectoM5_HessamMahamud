@@ -63,5 +63,4 @@ build/
 *.tmp
 *.bak
 *.old
-docs
-
+docs/
