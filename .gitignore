@@ -64,3 +64,5 @@ build/
 *.bak
 *.old
 docs/
+.agents/
+.codex/
