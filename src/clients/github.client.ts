@@ -1,7 +1,7 @@
 import { Octokit } from "@octokit/rest";
 import { env } from "../config/env.js";
 import { githubRequest } from "./request.js";
-import { Repository } from "../schemas/repository.schema.js";
+import { Repository } from "../schemas/repositories.schema.js";
 
 function createOcotkit() {
     return new Octokit({
