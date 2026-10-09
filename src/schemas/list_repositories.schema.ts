@@ -17,3 +17,8 @@ export const listRepositoriesSchema = z.object({
         .default(3)
         .describe("Cantidad de resultados por página, más 100 (defaukt: 3)"),
 });
+
+export const listRepositoriesOutputSchema = z.object({
+    ok: z.literal(true),
+    data: listRepositoriesSchema,
+});

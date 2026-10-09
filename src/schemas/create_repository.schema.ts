@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { RepositorySchema } from "./repository.schema.js";
 
 export const createRepositorySchema = z.object({
     name: z
@@ -19,4 +20,9 @@ export const createRepositorySchema = z.object({
         .boolean()
         .default(false)
         .describe("Si el repositorio es privado (default: false)"),
+});
+
+export const createRepositoryOutputSchema = z.object({
+    ok: z.literal(true),
+    data: RepositorySchema,
 });
