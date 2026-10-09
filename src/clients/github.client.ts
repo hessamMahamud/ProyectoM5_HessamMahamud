@@ -1,6 +1,7 @@
 import { Octokit } from "@octokit/rest";
 import { env } from "../config/env.js";
 import { githubRequest } from "./request.js";
+import { Repository } from "../schemas/repository.schema.js";
 
 function createOcotkit() {
     return new Octokit({
@@ -38,7 +39,7 @@ export class GithubClient {
         }));
 
         return {
-            fullName: data.full_name,
+            full_name: data.full_name,
             url: data.html_url,
             private: data.private,
             description: data.description ?? null,
@@ -56,7 +57,7 @@ export class GithubClient {
         );
 
         return data.map((repo) => ({
-            fullName: repo.full_name,
+            full_name: repo.full_name,
             url: repo.html_url,
             private: repo.private,
             description: repo.description ?? null,
