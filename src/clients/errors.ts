@@ -1,5 +1,3 @@
-import { RequestError } from "@octokit/request-error";
-
 export class GitHubError extends Error {
     constructor(
         message: string,
@@ -52,7 +50,7 @@ export class GitHubServerError extends GitHubError {
     }
 }
 
-export function readRateLimit(headers: Record<string, unknown>): RateLimitInfo {
+export function readRateLimit(headers: Record<string, unknown>) {
     return {
         limit: Number(headers["x-ratelimit-limit"] ?? 0),
         remaining: Number(headers["x-ratelimit-remaining"] ?? -1),
@@ -74,7 +72,7 @@ export function mapGitHubError(error: any): GitHubError {
     };
 
     if (status === 404) return new GitHubNotFoundError();
-    
+
     if (status === 422) {
         return new GitHubValidationError("Input inválido (422). Probablemente falte un campo requerido como el título.", error?.response?.data?.errors ?? error?.errors);
     };
