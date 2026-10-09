@@ -1,5 +1,3 @@
-import { RequestError } from "@octokit/request-error";
-
 export class GitHubError extends Error {
     constructor(
         message: string,
@@ -70,7 +68,7 @@ export class GitHubServerError extends GitHubError {
     };
 }
 
-export function readRateLimit(headers: Record<string, unknown>): RateLimitInfo {
+export function readRateLimit(headers: Record<string, unknown>) {
     return {
         limit: Number(headers["x-ratelimit-limit"] ?? 0),
         remaining: Number(headers["x-ratelimit-remaining"] ?? -1),
