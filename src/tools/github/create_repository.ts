@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { createRepositorySchema } from "../../schemas/create_repository.schema.js";
+import { createRepositoryOutputSchema, createRepositorySchema } from "../../schemas/create_repository.schema.js";
 import { GithubClient } from "../../clients/github.client.js";
 import { toToolError } from "./result.js";
 
@@ -12,6 +12,7 @@ export function registerCreateRepository(server: McpServer) {
             El campo name solo permite letras, números y guiones (3-100 caracteres).
             Ejemplo: {"name", "feature-user-profile", "description": "Feature de perfil de usuario", "private": true}`,
             inputSchema: createRepositorySchema.shape,
+            outputSchema: createRepositoryOutputSchema,
         },
 
         async (args) => {
