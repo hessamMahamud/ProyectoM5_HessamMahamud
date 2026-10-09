@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { RepositorySchema } from "./repository.schema.js";
 
 export const listRepositoriesSchema = z.object({
     type: z
@@ -20,5 +21,5 @@ export const listRepositoriesSchema = z.object({
 
 export const listRepositoriesOutputSchema = z.object({
     ok: z.literal(true),
-    data: listRepositoriesSchema,
+    data: z.array(RepositorySchema),
 });
