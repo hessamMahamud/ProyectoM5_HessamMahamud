@@ -6,6 +6,6 @@ export type GithubClient = Octokit;
 export function createGithubClient(): GithubClient {
     return new Octokit({
         auth: env.GITHUB_TOKEN,
-        userAgent: "AutomateHub-Agent",
+        userAgent: "AutomateHub-MCP-Agent",
     });
 }
