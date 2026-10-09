@@ -6,12 +6,12 @@ import {
 } from "./errors.js";
 
 export const githubRequest = async<T>(
-    op: () => Promise<{ data: T; headers: Record<string, unknown> }>,
+    operation: () => Promise<{ data: T; headers: Record<string, unknown> }>,
     attempt = 0,
 ): Promise<T> => {
 
     try {
-        const res = await op();
+        const res = await operation();
         const rl = readRateLimit(res.headers);
         console.error(`[GH RateLimit] remaining: ${rl.remaining}/${rl.limit}`);
         return res.data;
@@ -19,19 +19,19 @@ export const githubRequest = async<T>(
     } catch (error) {
         const err = mapGitHubError(error);
 
-        if (error instanceof GitHubRateLimitError && attempt === 0) {
-            await delayUntilReset(error.resetEpochSeconds);
-            return githubRequest(op, attempt + 1);
+        if (err instanceof GitHubRateLimitError && attempt === 0) {
+            await delayUntilReset(err.resetEpochSeconds); // 10sec
+            return githubRequest(operation, attempt + 1); // octokit
         }
 
-        if (error instanceof GitHubServerError && attempt < 2) {
+        if (err instanceof GitHubServerError && attempt < 2) {
             const delay = 1000 * 2 ** attempt;
-            console.error(`[GH] Error ${error.status}, reintentando en ${delay / 1000}s...`,);
+            console.error(`[GH] Error ${err.status}, reintentando en ${delay / 1000}s...`,);
             await new Promise((r) => setTimeout(r, delay));
-            return githubRequest(op, attempt + 1);
+            return githubRequest(operation, attempt + 1);
         }
 
-        throw error;
+        throw err;
     };
 }
 
