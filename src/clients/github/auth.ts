@@ -1,4 +1,4 @@
-import type { GithubClient } from "./github.client.js";
+import type { GithubClient } from "../github.client.js";
 
 export async function verifyAuth(client: GithubClient) {
     const { data } = await client.rest.users.getAuthenticated();

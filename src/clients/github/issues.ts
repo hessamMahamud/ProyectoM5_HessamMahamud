@@ -1,6 +1,6 @@
-import type { GithubClient } from "./github.client.js";
-import { githubRequest } from "./gh.request.client.js";
-import type { Issue } from "../schemas/issues.schema.js";
+import type { GithubClient } from "../github.client.js";
+import { Issue } from "../../schemas/issues.schema.js";
+import { githubRequest } from "./request.js";
 
 function mapIssue(issue: {
     number: number;

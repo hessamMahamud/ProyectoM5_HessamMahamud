@@ -1,6 +1,6 @@
-import type { GithubClient } from "./github.client.js";
-import { githubRequest } from "./gh.request.client.js";
-import type { Repository } from "../schemas/repositories.schema.js";
+import type { GithubClient } from "../github.client.js";
+import { githubRequest } from "./request.js";
+import { Repository } from "../../schemas/repositories.schema.js";
 
 export async function createRepository(
     client: GithubClient,
