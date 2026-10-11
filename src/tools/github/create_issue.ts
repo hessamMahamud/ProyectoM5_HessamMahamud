@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { createIssue } from "../../clients/gh.issues.client.js";
+import { createIssue } from "../../clients/github/issues.js";
 import { createIssueOutputSchema, createIssueSchema } from "../../schemas/issues.schema.js";
 import { toolFailure, toolSuccess, toolValidationFailure } from "./result.js";
 import type { GithubClient } from "../../clients/github.client.js";

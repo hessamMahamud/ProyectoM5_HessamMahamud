@@ -1,3 +1,6 @@
+import { GitHubError, GitHubValidationError } from "../../clients/github/errors.js";
+import { ZodError } from "zod";
+
 export type ToolResult<T> =
     | { ok: true; data: T }
     | { ok: false; error: { type: string; message: string; details?: unknown } };
@@ -31,9 +34,6 @@ export function toolValidationFailure(message: string, details?: unknown) {
         isError: true as const,
     };
 }
-
-import { GitHubError, GitHubValidationError } from "../../clients/gh.errors.client.js";
-import { ZodError } from "zod";
 
 export function toToolError(error: unknown): ToolResult<never> {
     if (error instanceof ZodError) {
