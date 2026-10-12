@@ -1,62 +1,33 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
-import { GithubClient } from "../../clients/github.client.js";
-import { createCommitSchema, createCommitOutputSchema } from "../../schemas/commits.js";
-import { toToolError } from "./result.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { createCommit } from "../../clients/github/commits.js";
+import { createCommitOutputSchema, createCommitSchema } from "../../schemas/commit.schema.js";
+import { toolFailure, toolSuccess, toolValidationFailure } from "./result.js";
+import type { GithubClient } from "../../clients/github.client.js";
 
-export function registerCreateCommit(server: McpServer) {
+export function registerCreateCommit(server: McpServer, githubClient: GithubClient) {
     server.registerTool(
         "create_commit",
         {
-            description:
-            "Creates or replaces a file in a GitHub repositoru by committing it to the specified branch. Handles the full Git object pipeline internally.",
+            description: "Crea o actualiza un archivo mediante un commit en un repositorio.",
             inputSchema: createCommitSchema.shape,
-            outputSchema: createCommitOutputSchema.shape,
+            outputSchema: createCommitOutputSchema,
         },
-
         async (args) => {
             const parsed = createCommitSchema.safeParse(args);
-
             if (!parsed.success) {
-                const messages = parsed.error.issues.map((e) => e.message).join("; ");
-                const body = {
-                    ok: false,
-                    error: { type: "VALIDATION", message: messages },
-                };
-
-                return {
-                    content: [{ type: "text", text: JSON.stringify(body) }],
-                    isError: true,
-                }
+                return toolValidationFailure(
+                    parsed.error.issues.map((issue) => issue.message).join("; "),
+                    parsed.error.issues,
+                );
             }
 
-            const { owner, repo, path, content, message, branch } = parsed.data;
-            const gh = new GithubClient();
-
             try {
-                const data = await gh.createCommit(
-                    owner,
-                    repo,
-                    path,
-                    content,
-                    message,
-                    branch,
-                );
-
-                const result = { ok: true, data };
-
-                return {
-                    structuredContent: result,
-                    content: [{ type: "text", text: JSON.stringify(result) }],
-                };
-
+                const { owner, repo, message, content, path, branch, sha } = parsed.data;
+                const data = await createCommit(githubClient, owner, repo, message, content, path, branch, sha);
+                return toolSuccess(data);
             } catch (error) {
-                const toolError = toToolError(error);
-
-                return {
-                    content: [{ type: "text", text: JSON.stringify(toolError) }],
-                    isError: true,
-                };
-            };
+                return toolFailure(error);
+            }
         },
     );
-};
+}

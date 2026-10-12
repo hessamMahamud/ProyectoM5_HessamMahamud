@@ -5,7 +5,7 @@ export function registerPing(server: McpServer) {
     server.registerTool(
         "ping",
         {
-            description: "Una tool para devolver stirng que diga ping",
+            description: "Una tool para devolver stirng que diga ping (Health Check)",
             inputSchema: { message: zod.string().optional() },
         },
         async ({ message }) => ({

@@ -1,18 +1,47 @@
+import { GitHubError, GitHubValidationError } from "../../clients/github/errors.js";
+import { ZodError } from "zod";
+
 export type ToolResult<T> =
     | { ok: true; data: T }
     | { ok: false; error: { type: string; message: string; details?: unknown } };
 
-import { inflateSync } from "node:zlib";
-import { GitHubError, GitHubValidationError } from "../../clients/errors.js";
-import { ZodError } from "zod";
+export function toolSuccess<T>(data: T) {
+    const body = { ok: true as const, data };
+
+    return {
+        structuredContent: body,
+        content: [{ type: "text" as const, text: JSON.stringify(body) }],
+    };
+}
+
+export function toolFailure(error: unknown) {
+    const body = toToolError(error);
+
+    return {
+        content: [{ type: "text" as const, text: JSON.stringify(body) }],
+        isError: true as const,
+    };
+}
+
+export function toolValidationFailure(message: string, details?: unknown) {
+    const body: ToolResult<never> = {
+        ok: false as const,
+        error: { type: "VALIDATION", message, ...(details !== undefined && { details }) },
+    };
+
+    return {
+        content: [{ type: "text" as const, text: JSON.stringify(body) }],
+        isError: true as const,
+    };
+}
 
 export function toToolError(error: unknown): ToolResult<never> {
     if (error instanceof ZodError) {
         return {
             ok: false,
             error: {
-                type: "invalid_input",
-                message: "El input de la tool no cumple el schema",
+                type: "VALIDATION",
+                message: "El input de la tool no cumple el schema.",
                 details: error.issues,
             },
         };
@@ -22,7 +51,7 @@ export function toToolError(error: unknown): ToolResult<never> {
         return {
             ok: false,
             error: {
-                type: "validation_error",
+                type: "VALIDATION",
                 message: error.message,
                 details: error.details,
             },
