@@ -68,6 +68,13 @@ export class GitHubServerError extends GitHubError {
     };
 }
 
+export class GitHubFileExpectedError extends GitHubError {
+    constructor(path: string) {
+        super(`La ruta "${path}" no corresponde a un archivo.`, 422);
+        this.name = "GitHubFileExpectedError";
+    };
+};
+
 export function readRateLimit(headers: Record<string, unknown>) {
     return {
         limit: Number(headers["x-ratelimit-limit"] ?? 0),

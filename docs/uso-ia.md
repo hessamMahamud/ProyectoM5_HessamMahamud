@@ -27,7 +27,7 @@ Se utilizó el LLM para comparar el estado del repositorio con los requisitos de
 
 ### 2. Elaboración de la especificación
 
-La revisión produjo [`docs/spec-terminacion.md`](./spec-terminacion.md), que separa lo cumplido, lo parcial y lo pendiente. La especificación también registra las decisiones del proyecto:
+La revisión produjo [`docs/specs/spec-terminacion.md`](./specs/spec-terminacion.md), que separa lo cumplido, lo parcial y lo pendiente. La especificación también registra las decisiones del proyecto:
 
 - utilizar `.codex` desde VSCode;
 - crear `get_repository`;
@@ -36,7 +36,7 @@ La revisión produjo [`docs/spec-terminacion.md`](./spec-terminacion.md), que se
 
 ### 3. Diagnóstico de configuración y red
 
-Se analizó la relación entre `.codex/mcp.json`, el servidor local y la conexión con GitHub. Se distinguió entre:
+Se analizó la relación entre `.mcp.json`, el servidor local y la conexión con GitHub. Se distinguió entre:
 
 - la configuración MCP, que inicia el proceso local por `stdio`;
 - el entorno de ejecución, que puede bloquear la red saliente;
@@ -84,4 +84,3 @@ Para continuar el trabajo, cada cambio de código debe registrarse con:
 - requisito que cubre;
 - propuesta de tests con mocks;
 - aprobación del autor antes de editar.
-

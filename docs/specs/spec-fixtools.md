@@ -1,3 +1,7 @@
+---
+title: "Spec lectura sha"
+---
+
 # Especificación: lectura de archivos y resolución de `sha` en AutomateHub MCP
 
 ## Objetivo
