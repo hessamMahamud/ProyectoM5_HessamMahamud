@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import { createRepositorySchema, listRepositoriesSchema } from "../schemas/repositories.schema.js";
 import { createIssueSchema, listIssuesSchema } from "../schemas/issues.schema.js";
 import { createCommitSchema } from "../schemas/commit.schema.js";
+import { readFileSchema } from "../schemas/file.schema.js";
 
 describe("schemas de repositorios", () => {
     test("acepta un repositorio válido", () => {
@@ -43,6 +44,33 @@ describe("schemas de commits", () => {
             message: "Add file",
             content: "hello",
             path: "/README.md",
+        }).success).toBe(false);
+    });
+});
+
+describe("schemas de archivos", () => {
+    test("acepta una ruta relativa válida", () => {
+        expect(readFileSchema.safeParse({
+            owner: "hessam",
+            repo: "wiseArchive",
+            path: "README.md",
+            ref: "main",
+        }).success).toBe(true);
+    });
+
+    test("rechaza rutas absolutas", () => {
+        expect(readFileSchema.safeParse({
+            owner: "hessam",
+            repo: "wiseArchive",
+            path: "/README.md",
+        }).success).toBe(false);
+    });
+
+    test("rechaza datos obligatorios vacíos", () => {
+        expect(readFileSchema.safeParse({
+            owner: " ",
+            repo: "wiseArchive",
+            path: "README.md",
         }).success).toBe(false);
     });
 });

@@ -50,7 +50,7 @@ Reglas:
 }
 ```
 
-## Implementación propuesta
+## Implementación
 
 ### `src/schemas/file.schema.ts` — nuevo
 
