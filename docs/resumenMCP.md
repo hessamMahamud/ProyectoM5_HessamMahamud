@@ -148,7 +148,6 @@ La tool debe ser de solo lectura. Esto permite que un agente verifique que el re
 
 **Objetivo:** que la IA (Claude) construyera el README.md del homework con la investigación sobre agentes, tool use y MCP, usando solo información verificada y el formato Markdown pedido.
 
-**Prompt exacto:** mensaje se encuentra en [Prompt Homework Módulo 5 Clase 1](20260929150313.md).
 
 ## Fuentes (bibliografía)
 
