@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { listRepos } from "../../clients/gh.repositories.client.js";
+import { listRepos } from "../../clients/github/repositories.js";
 import type { GithubClient } from "../../clients/github.client.js";
 import {
     listRepositoriesOutputSchema,

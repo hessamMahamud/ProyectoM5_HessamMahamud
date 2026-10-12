@@ -17,8 +17,6 @@ ehthumbs.db
 .directory
 
 # -------- Editores --------
-.vscode/
-!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
@@ -63,15 +61,8 @@ build/
 *.tmp
 *.bak
 *.old
-20260929150313.md
 20261011205403.md
-prompt.json
-schema.json
-Screenshot From 2026-09-28 09-21-18.png
-20261011164528.md
-resume.md
 .madgerc
-
-# -------- Agents --------
-.agents/
-.codex/
+.codex
+.agents
+rubrica.csv

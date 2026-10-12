@@ -4,7 +4,7 @@ import {
     GitHubNotFoundError,
     GitHubValidationError,
     mapGitHubError,
-} from "../clients/gh.errors.client.js";
+} from "../clients/github/errors.js";
 import { toToolError } from "../tools/github/result.js";
 
 describe("errores de GitHub", () => {

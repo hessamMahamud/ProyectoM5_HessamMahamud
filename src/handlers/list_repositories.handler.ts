@@ -1,7 +1,7 @@
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { GitHubError } from "../clients/gh.errors.client.js";
+import { GitHubError } from "../clients/github/errors.js";
 import type { GithubClient } from "../clients/github.client.js";
-import { listRepos } from "../clients/gh.repositories.client.js";
+import { listRepos } from "../clients/github/repositories.js";
 
 export async function listRepositoriesHandler(
     // exactOptionalPropertyTypes exige el "| undefined" porque zod lo produce

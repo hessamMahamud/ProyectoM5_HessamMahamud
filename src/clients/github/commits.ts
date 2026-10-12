@@ -1,9 +1,9 @@
-import type { GithubClient } from "./github.client.js";
-import { githubRequest } from "./gh.request.client.js";
-import type { Commit } from "../schemas/commit.schema.js";
+import type { Octokit } from "@octokit/rest";
+import { githubRequest } from "./request.js";
+import type { Commit } from "../../schemas/commit.schema.js";
 
 export async function createCommit(
-    client: GithubClient,
+    client: Octokit,
     owner: string,
     repo: string,
     message: string,

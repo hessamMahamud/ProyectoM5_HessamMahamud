@@ -1,6 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createRepositoryOutputSchema, createRepositorySchema } from "../../schemas/repositories.schema.js";
-import { createRepository } from "../../clients/gh.repositories.client.js";
+import { createRepository } from "../../clients/github/repositories.js";
 import { toolFailure, toolSuccess, toolValidationFailure } from "./result.js";
 import type { GithubClient } from "../../clients/github.client.js";
 

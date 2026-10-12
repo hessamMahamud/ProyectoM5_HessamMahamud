@@ -1,8 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
 import type { Octokit } from "@octokit/rest";
-import { createIssue, listIssues } from "../clients/gh.issues.client.js";
-import { createCommit } from "../clients/gh.commits.client.js";
-import { listRepos } from "../clients/gh.repositories.client.js";
+import { createIssue, listIssues } from "../clients/github/issues.js";
+import { createCommit } from "../clients/github/commits.js";
+import { listRepos } from "../clients/github/repositories.js";
 import { githubResponse } from "./helpers.js";
 
 describe("cliente de issues", () => {
