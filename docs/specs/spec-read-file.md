@@ -1,3 +1,7 @@
+---
+title: "Spec tool read_file"
+---
+
 # Especificación: tool `read_file`
 
 ## Objetivo

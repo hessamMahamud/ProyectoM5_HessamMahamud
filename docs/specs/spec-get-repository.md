@@ -1,3 +1,7 @@
+---
+title: "Spec tool get_repository"
+---
+
 # Especificación: tool `get_repository`
 
 ## Objetivo

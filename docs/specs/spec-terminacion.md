@@ -1,3 +1,7 @@
+---
+title: "Spec Avance AutomateHub"
+---
+
 # Especificación de terminación — AutomateHub
 
 ## 1. Objetivo
