@@ -111,17 +111,36 @@ Fuentes: MCP Docs, _Architecture overview_ (versión 2026-07-28); MCP Specificat
 
 ## 2. Marketplace/Ecosistema: 3 servidores MCP relevantes
 
-_Tabla para completar._
+Los siguientes servidores aparecen como implementaciones de referencia en la documentación oficial de MCP: [ejemplos oficiales](https://modelcontextprotocol.io/examples).
 
 | Server (name) | Link al directorio + link al server | 2 tools que expone | Requisitos | Riesgos | Mitigación |
 | - | - | - | - | - | - |
-|   |   |   |   |   |   |
-|   |   |   |   |   |   |
-|   |   |   |   |   |   |
+| Filesystem | [Directorio MCP](https://modelcontextprotocol.io/examples) · [Código](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) | `read_file`, `write_file` | Node.js y directorios permitidos en la configuración | Lectura o escritura accidental de archivos sensibles | Conceder solo directorios necesarios y revisar permisos antes de conectarlo |
+| GitHub | [Directorio MCP](https://modelcontextprotocol.io/examples) · [Código](https://github.com/modelcontextprotocol/servers) | Gestión de archivos/repositorios, búsqueda en GitHub | Node.js y token de GitHub | El LLM puede modificar repositorios o exponer información privada | Token de mínimo privilegio, repositorios de prueba y confirmación para operaciones de escritura |
+| PostgreSQL | [Directorio MCP](https://modelcontextprotocol.io/examples) · [Código archivado](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres) | Consulta de datos, inspección del esquema | PostgreSQL accesible y credenciales | Exposición o modificación de datos sensibles | Usuario de solo lectura, base de datos de prueba y restricción de red |
 
 ## 3. Diseño conceptual: Tool para un GitHub Agent
 
-_Pendiente: el prompt no incluyó objetivos para esta sección._
+### Tool propuesta: `get_repository`
+
+**Objetivo:** obtener información básica de un repositorio sin modificar GitHub.
+
+**Entrada:** `owner` y `repo`, ambos strings obligatorios y no vacíos.
+
+**Flujo:**
+
+1. El LLM identifica el propietario y el nombre del repositorio.
+2. El MCP server valida los datos con Zod.
+3. Octokit consulta `repos.get` en GitHub.
+4. El servidor devuelve una respuesta normalizada o un error legible (`404`, `401`, `403`).
+
+**Salida mínima:** nombre completo, URL, descripción, visibilidad, rama principal y propietario.
+
+**Ejemplo de prompt:**
+
+> Consulta el repositorio `owner/repo` y dime su URL, descripción, visibilidad y rama principal.
+
+La tool debe ser de solo lectura. Esto permite que un agente verifique que el repositorio existe antes de ejecutar tools de escritura como `create_issue` o `create_commit`.
 
 ## 4. Bitácora de uso de IA (crítica y verificable)
 
