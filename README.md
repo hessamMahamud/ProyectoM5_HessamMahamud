@@ -206,7 +206,7 @@ Tool de solo lectura propuesta para consultar un repositorio mediante `owner` y 
 
 ### `read_file`
 
-Tool propuesta en [`docs/spec-fixtools.md`](./docs/spec-fixtools.md) para leer un archivo y devolver su contenido junto con el `sha` del blob. Ese `sha` permitiría actualizar de forma segura un archivo existente mediante `create_commit`, por ejemplo `wiseArchive/README.md`. Actualmente no existe una implementación registrada.
+Tool propuesta en [`docs/specs/spec-read-file.md`](./docs/specs/spec-read-file.md) para leer un archivo y devolver su contenido junto con el `sha` del blob. La especificación general de lectura de archivos se conserva en [`docs/specs/spec-fixtools.md`](./docs/specs/spec-fixtools.md). Actualmente no existe una implementación registrada.
 
 ## Validación y errores
 
@@ -258,13 +258,13 @@ La siguiente matriz relaciona los requisitos del proyecto con la evidencia esper
 | README, prompts y arquitectura | Este README y diagrama Mermaid | Implementado |
 | Guía del PAT | Sección “GitHub Personal Access Token” | Implementado |
 | `get_repository` | `src/tools/github/get_repository.ts` | Pendiente |
-| `read_file` y resolución de `sha` | [`docs/spec-fixtools.md`](./docs/spec-fixtools.md) | Pendiente |
+| `read_file` y resolución de `sha` | [`docs/specs/spec-read-file.md`](./docs/specs/spec-read-file.md) y [`docs/specs/spec-fixtools.md`](./docs/specs/spec-fixtools.md) | Pendiente |
 
 La suite mínima exigida por el prompt es de ocho tests unitarios. La cantidad exacta y el resultado de la última ejecución deben comprobarse con `npm test`; esta documentación no reemplaza esa ejecución.
 
 ## Documentación del uso de IA
 
-La bitácora y los criterios utilizados durante la creación del proyecto están en [`docs/uso-ia.md`](./docs/uso-ia.md). También se conserva la especificación de terminación en [`docs/spec-terminacion.md`](./docs/spec-terminacion.md).
+La bitácora y los criterios utilizados durante la creación del proyecto están en [`docs/uso-ia.md`](./docs/uso-ia.md). Las especificaciones se encuentran en [`docs/specs/`](./docs/specs/), incluida la especificación de terminación en [`docs/specs/spec-terminacion.md`](./docs/specs/spec-terminacion.md).
 
 ## Seguridad y límites
 
@@ -276,6 +276,6 @@ La bitácora y los criterios utilizados durante la creación del proyecto están
 
 ## Estado del proyecto
 
-La base del servidor, las tools principales, la validación y los tests unitarios están implementados. Actualmente están registradas `create_repository`, `create_issue`, `create_commit`, `list_issues`, `list_repositories` y `ping`. La documentación de terminación se encuentra en [`docs/spec-terminacion.md`](./docs/spec-terminacion.md); la propuesta para lectura de archivos y resolución de `sha` se encuentra en [`docs/spec-fixtools.md`](./docs/spec-fixtools.md).
+La base del servidor, las tools principales, la validación y los tests unitarios están implementados. Actualmente están registradas `create_repository`, `create_issue`, `create_commit`, `list_issues`, `list_repositories` y `ping`. La documentación de terminación se encuentra en [`docs/specs/spec-terminacion.md`](./docs/specs/spec-terminacion.md); las propuestas independientes para las siguientes tools son [`spec-get-repository.md`](./docs/specs/spec-get-repository.md) y [`spec-read-file.md`](./docs/specs/spec-read-file.md).
 
 Permanecen pendientes `get_repository` —requerida por la especificación de terminación— y `read_file` —necesaria para leer archivos y obtener su `sha` antes de actualizarlos—. Ninguna de las dos debe considerarse disponible hasta que sea implementada, registrada y cubierta por tests.

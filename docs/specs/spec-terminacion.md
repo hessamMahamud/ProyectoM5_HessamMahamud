@@ -2,7 +2,7 @@
 
 ## 1. Objetivo
 
-Completar la entrega del servidor MCP **AutomateHub**, integrado con la API de GitHub, de acuerdo con los requisitos definidos en [`docs/prompt.json`](./prompt.json).
+Completar la entrega del servidor MCP **AutomateHub**, integrado con la API de GitHub, de acuerdo con los requisitos definidos en [`docs/prompt.json`](../prompt.json).
 
 Esta especificación se limita a definir el trabajo pendiente y sus criterios de aceptación. No implica todavía cambios en el código de implementación.
 
@@ -10,18 +10,18 @@ Esta especificación se limita a definir el trabajo pendiente y sus criterios de
 
 ### Cumplido o prácticamente cumplido
 
-- Existe un servidor MCP por `stdio` en [`src/index.ts`](../src/index.ts).
+- Existe un servidor MCP por `stdio` en [`src/index.ts`](../../src/index.ts).
 - Las cuatro tools mínimas están implementadas y registradas:
   - `create_repository`
   - `create_issue`
   - `create_commit`
   - `list_issues`
-- Hay schemas de Zod para las entradas y salidas en [`src/schemas/`](../src/schemas).
+- Hay schemas de Zod para las entradas y salidas en [`src/schemas/`](../../src/schemas).
 - La validación de nombres de repositorio exige entre 3 y 100 caracteres, usando letras, números y guiones.
-- Existe una capa común para transformar errores de GitHub a mensajes legibles en [`src/clients/github/errors.ts`](../src/clients/github/errors.ts) y [`src/tools/github/result.ts`](../src/tools/github/result.ts).
-- Existe configuración MCP para el workspace en [`.codex/mcp.json`](../.codex/mcp.json).
+- Existe una capa común para transformar errores de GitHub a mensajes legibles en [`src/clients/github/errors.ts`](../../src/clients/github/errors.ts) y [`src/tools/github/result.ts`](../../src/tools/github/result.ts).
+- Existe configuración MCP para el workspace en [`.mcp.json`](../../.mcp.json).
 - Hay tests unitarios con Vitest para schemas, clientes, errores y un handler.
-- La configuración de entorno está centralizada en [`src/config/env.ts`](../src/config/env.ts), y el secreto se mantiene fuera del repositorio mediante `.env`.
+- La configuración de entorno está centralizada en [`src/config/env.ts`](../../src/config/env.ts), y el secreto se mantiene fuera del repositorio mediante `.env`.
 
 ### Parcial o pendiente
 
@@ -30,7 +30,7 @@ Esta especificación se limita a definir el trabajo pendiente y sus criterios de
 - No existe el diagrama de arquitectura solicitado.
 - No existe una guía documentada para crear y configurar el GitHub Personal Access Token.
 - No hay una matriz de cobertura que demuestre explícitamente cada requisito de testing.
-- La configuración disponible está en `.codex/mcp.json`; debe confirmarse si también se requiere una configuración específica para `.vscode/mcp.json` o Antigravity.
+- La configuración disponible está en `.mcp.json`; debe confirmarse si también se requiere una configuración específica para `.vscode/mcp.json` o Antigravity.
 - Debe verificarse, mediante una revisión posterior, que el servidor pueda iniciarse desde la configuración MCP y que el cliente MCP pueda descubrir y llamar las tools.
 - Debe revisarse si `get_repository` forma parte del alcance final: existe un archivo con ese nombre, pero no está registrado entre las tools mínimas.
 
@@ -107,9 +107,9 @@ La documentación debe evitar mostrar tokens reales.
 
 ### 3.5 Configuración del Host MCP
 
-Documentar la configuración existente en [`.codex/mcp.json`](../.codex/mcp.json) y resolver una decisión de entrega:
+Documentar la configuración existente en [`.mcp.json`](../../.mcp.json) y resolver una decisión de entrega:
 
-- **Opción A:** conservar `.codex/mcp.json` como configuración del entorno utilizado durante el curso.
+- **Opción A:** conservar `.mcp.json` como configuración del entorno utilizado durante el curso.
 - **Opción B:** añadir una configuración equivalente para VSCode si el Host objetivo la requiere.
 - **Opción C:** documentar ambas, indicando que solo debe mantenerse activa la que corresponda al Host utilizado.
 
@@ -155,7 +155,7 @@ La prueba de integración debe ser opcional respecto de los tests unitarios y nu
 - Documentación de tools y prompts efectivos.
 - Diagrama de arquitectura incluido en el README.
 - Guía de Personal Access Token y seguridad.
-- Decisión documentada sobre `.codex/mcp.json`, VSCode y/o Antigravity.
+- Decisión documentada sobre `.mcp.json`, VSCode y/o Antigravity.
 - Matriz de requisitos y tests.
 - Código existente revisado únicamente donde sea necesario para cerrar los requisitos.
 - Evidencia de validación final, sin secretos.
