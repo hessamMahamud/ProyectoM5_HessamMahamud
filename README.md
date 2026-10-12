@@ -1,6 +1,6 @@
 # AutomateHub
 
-Servidor MCP en TypeScript que conecta un LLM con la API de GitHub mediante tools especializadas. El proyecto forma parte del SoyHenry Módulo 5 y tiene un objetivo principalmente didáctico: comprender cómo se construye, valida, prueba y conecta un MCP server.
+Servidor MCP en TypeScript que conecta un LLM con la API de GitHub mediante tools especializadas. El proyecto forma parte del curso de soyHenry Módulo 5 y tiene un objetivo principalmente didáctico: comprender cómo se construye, valida, prueba y conecta un MCP server.
 
 ## Objetivos
 
@@ -34,14 +34,14 @@ flowchart LR
     E --> L
 ```
 
-VSCode actúa como Host MCP y utiliza la configuración de [`.codex/mcp.json`](./.codex/mcp.json). El servidor se comunica con el Host mediante `stdio`; Octokit se encarga de las llamadas a GitHub.
+El Host MCP utiliza la configuración de [`.mcp.json`](./.mcp.json) en la raíz del proyecto. El servidor se comunica con el Host mediante `stdio`; Octokit se encarga de las llamadas a GitHub.
 
 ## Requisitos
 
 - Node.js compatible con el proyecto.
 - npm.
 - Un GitHub Personal Access Token configurado localmente.
-- VSCode con soporte para la configuración MCP utilizada por este workspace.
+- Un Host MCP compatible con la configuración del workspace.
 
 ## Instalación
 
@@ -61,13 +61,46 @@ DEFAULT_REPO=
 
 ## GitHub Personal Access Token
 
-El token debe tener únicamente los permisos necesarios para las operaciones que se quieran utilizar. Según el tipo de token y la configuración de la cuenta, pueden ser necesarios permisos para:
+AutomateHub necesita un GitHub Personal Access Token (PAT) para autenticarse con Octokit. El token debe pertenecer a la cuenta que ejecutará las operaciones y debe tener únicamente los permisos necesarios.
 
-- repositorios, para crear o consultar repositorios;
-- issues, para crear y listar issues;
-- contents, para crear o actualizar archivos mediante commits.
+### Creación del token
 
-Nunca copies un token real en el README, en los tests, en capturas de pantalla ni en logs. Si el token se filtra, revócalo y crea uno nuevo desde GitHub.
+1. En GitHub, abre **Settings → Developer settings → Personal access tokens**.
+2. Elige **Fine-grained tokens** cuando sea posible.
+3. Define una fecha de expiración corta o razonable y limita el token a los repositorios que AutomateHub necesita utilizar.
+4. Concede solo los permisos requeridos por las tools:
+
+   | Operación | Permiso mínimo esperado |
+   | --- | --- |
+   | Consultar repositorios | `Metadata: Read-only` |
+   | Crear repositorios | Permisos de administración de repositorios que GitHub solicite para esa operación |
+   | Crear o listar issues | `Issues: Read and write` |
+   | Crear o actualizar archivos con commits | `Contents: Read and write` |
+
+   Los nombres y niveles exactos pueden variar entre tokens fine-grained y classic. Antes de usar un permiso amplio, revisa si el repositorio puede limitarse a una selección concreta.
+
+5. Genera el token y cópialo inmediatamente; GitHub no vuelve a mostrarlo completo.
+
+### Configuración local
+
+Crea `.env` a partir de [`.env.example`](./.env.example) y coloca el token sin comillas:
+
+```env
+GITHUB_TOKEN=github_pat_tu_token
+DEFAULT_OWNER=
+DEFAULT_REPO=
+```
+
+No uses el token directamente en el código, no lo pongas en prompts, issues, commits, capturas, logs ni archivos Markdown. `.env` debe permanecer fuera del control de versiones.
+
+### Diagnóstico y mantenimiento
+
+- Token ausente: el servidor no puede autenticarse al iniciar o al llamar a GitHub.
+- Token inválido o expirado: GitHub responde normalmente con `401`.
+- Permiso insuficiente: GitHub responde normalmente con `403`.
+- Repositorio no incluido en el alcance del token: una operación sobre ese repositorio puede responder `404` o `403`.
+- Si el token se filtra, revócalo desde la configuración de GitHub, crea uno nuevo y reemplázalo en `.env`.
+- Revisa periódicamente la fecha de expiración y elimina tokens que ya no utilices.
 
 ## Compilación y servidor MCP
 
@@ -77,22 +110,22 @@ El Host utiliza el archivo generado `dist/index.js`, por lo que primero debe gen
 npm run build
 ```
 
-La configuración MCP del workspace es:
+La configuración MCP activa del workspace es:
 
 ```json
 {
-  "servers": {
-    "AutomateHub-Agent": {
+  "mcpServers": {
+    "automateHub-mcp-server": {
       "type": "stdio",
       "command": "node",
-      "args": ["${workspaceFolder}/dist/index.js"],
-      "envFile": "${workspaceFolder}/.env"
+      "args": ["dist/index.js"],
+      "env": ".env"
     }
   }
 }
 ```
 
-Después de compilar, VSCode puede iniciar el servidor a través de [`.codex/mcp.json`](./.codex/mcp.json). La configuración no contiene el token; solo indica que debe cargarse desde `.env`.
+Después de compilar, el Host puede iniciar `automateHub-mcp-server` mediante [`.mcp.json`](./.mcp.json). La configuración no contiene el token; indica que el proceso debe cargar las variables desde `.env`. El comando usa `dist/index.js`, por lo que es necesario ejecutar `npm run build` después de modificar el código fuente. `dist/` es un artefacto generado y no debe editarse manualmente.
 
 ## Tools
 
@@ -165,9 +198,15 @@ Lista repositorios de la cuenta autenticada.
 
 Health check local del servidor. Devuelve `pong` o `pong: mensaje` y no llama a GitHub.
 
-### Próxima tool: `get_repository`
+## Tools planificadas
 
-La especificación del proyecto requiere crear y registrar `get_repository`. Actualmente su archivo es un esqueleto y todavía no debe considerarse una tool disponible. Su implementación se realizará después de aprobar una propuesta de cambios de código.
+### `get_repository`
+
+Tool de solo lectura propuesta para consultar un repositorio mediante `owner` y `repo`, devolviendo su nombre completo, URL, descripción, visibilidad, propietario y rama principal. La especificación de terminación establece que debe ser una tool oficial, pero actualmente [su archivo](./src/tools/github/get_repository.ts) no está registrado en [el índice de tools](./src/tools/index.tools.ts). Por eso no debe considerarse disponible todavía.
+
+### `read_file`
+
+Tool propuesta en [`docs/spec-fixtools.md`](./docs/spec-fixtools.md) para leer un archivo y devolver su contenido junto con el `sha` del blob. Ese `sha` permitiría actualizar de forma segura un archivo existente mediante `create_commit`, por ejemplo `wiseArchive/README.md`. Actualmente no existe una implementación registrada.
 
 ## Validación y errores
 
@@ -194,11 +233,34 @@ Los tests deben ejecutarse exclusivamente contra mocks de Octokit y no deben dep
 - acceso a Internet;
 - creación o modificación de repositorios, issues o commits reales.
 
-La suite cubre schemas, transformación de respuestas, exclusión de pull requests y normalización de errores. Para ejecutarla:
+La suite cubre schemas, transformación de respuestas, exclusión de pull requests y normalización de errores. La configuración del proyecto incluye además tests mockeados para clientes y handlers. Para ejecutarla:
 
 ```bash
 npm test
 ```
+
+### Matriz de requisitos y tests
+
+La siguiente matriz relaciona los requisitos del proyecto con la evidencia esperada. Los tests deben ejecutarse con mocks y no deben utilizar un token real ni modificar GitHub.
+
+| Requisito | Evidencia o archivo relacionado | Estado documentado |
+| --- | --- | --- |
+| `create_repository` | Tool registrada, schema y tests de cliente/handler | Implementado |
+| `create_issue` | Tool registrada, schema y tests de cliente/handler | Implementado |
+| `create_commit` | Tool registrada, validación de rutas y test de contenido Base64 | Implementado |
+| `list_issues` | Tool registrada, paginación y exclusión de pull requests | Implementado |
+| Schemas válidos e inválidos | `src/tests/schemas.test.ts` | Implementado |
+| Octokit mockeado | `src/tests/clients.test.ts` | Implementado |
+| Casos edge | Pull requests, rutas absolutas, paginación y campos opcionales | Parcial; ampliar evidencia si falta algún caso |
+| Errores `401`, `403`, `404`, `422`, rate limit y `5xx` | `src/tests/errors.test.ts` y `src/clients/github/errors.ts` | Implementado en la capa de errores; confirmar cobertura completa |
+| Mensajes legibles para el LLM | `src/tools/github/result.ts` y tests de errores | Implementado |
+| Configuración MCP | `.mcp.json`, `dist/index.js` y descubrimiento desde el Host | Verificado después de compilar |
+| README, prompts y arquitectura | Este README y diagrama Mermaid | Implementado |
+| Guía del PAT | Sección “GitHub Personal Access Token” | Implementado |
+| `get_repository` | `src/tools/github/get_repository.ts` | Pendiente |
+| `read_file` y resolución de `sha` | [`docs/spec-fixtools.md`](./docs/spec-fixtools.md) | Pendiente |
+
+La suite mínima exigida por el prompt es de ocho tests unitarios. La cantidad exacta y el resultado de la última ejecución deben comprobarse con `npm test`; esta documentación no reemplaza esa ejecución.
 
 ## Documentación del uso de IA
 
@@ -214,4 +276,6 @@ La bitácora y los criterios utilizados durante la creación del proyecto están
 
 ## Estado del proyecto
 
-La base del servidor, las tools principales, la validación y los tests unitarios están implementados. La documentación está en proceso de consolidación y `get_repository` permanece pendiente de implementación y registro.
+La base del servidor, las tools principales, la validación y los tests unitarios están implementados. Actualmente están registradas `create_repository`, `create_issue`, `create_commit`, `list_issues`, `list_repositories` y `ping`. La documentación de terminación se encuentra en [`docs/spec-terminacion.md`](./docs/spec-terminacion.md); la propuesta para lectura de archivos y resolución de `sha` se encuentra en [`docs/spec-fixtools.md`](./docs/spec-fixtools.md).
+
+Permanecen pendientes `get_repository` —requerida por la especificación de terminación— y `read_file` —necesaria para leer archivos y obtener su `sha` antes de actualizarlos—. Ninguna de las dos debe considerarse disponible hasta que sea implementada, registrada y cubierta por tests.
