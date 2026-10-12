@@ -1,4 +1,4 @@
-import type { GithubClient } from "../github.client.js";
+import type { Octokit } from "@octokit/rest";
 import { Issue } from "../../schemas/issues.schema.js";
 import { githubRequest } from "./request.js";
 
@@ -21,7 +21,7 @@ function mapIssue(issue: {
 }
 
 export async function createIssue(
-    client: GithubClient,
+    client: Octokit,
     owner: string,
     repo: string,
     title: string,
@@ -42,7 +42,7 @@ export async function createIssue(
 }
 
 export async function listIssues(
-    client: GithubClient,
+    client: Octokit,
     owner: string,
     repo: string,
     state: "open" | "closed" | "all" = "open",

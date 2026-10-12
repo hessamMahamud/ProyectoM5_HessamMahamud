@@ -1,6 +1,6 @@
-import type { GithubClient } from "../github.client.js";
+import type { Octokit } from "@octokit/rest";
 
-export async function verifyAuth(client: GithubClient) {
+export async function verifyAuth(client: Octokit) {
     const { data } = await client.rest.users.getAuthenticated();
 
     return {
