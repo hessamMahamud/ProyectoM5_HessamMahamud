@@ -17,9 +17,6 @@ ehthumbs.db
 .directory
 
 # -------- Editores --------
-.vscode/
-!.vscode/extensions.json
-!.vscode/mcp.json
 .idea/
 *.swp
 *.swo
@@ -67,5 +64,3 @@ build/
 20261011205403.md
 .madgerc
 
-# -------- Agents --------
-.agents/

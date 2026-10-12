@@ -1,0 +1,13 @@
+{
+	"servers": {
+		"AutomateHub-MCP-Agent": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"dist/index.js"
+			],
+			"envFile": ".env"
+		},
+	},
+	"inputs": []
+}
