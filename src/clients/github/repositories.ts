@@ -1,6 +1,6 @@
 import type { Octokit } from "@octokit/rest";
 import { githubRequest } from "./request.js";
-import { Repository } from "../../schemas/repositories.schema.js";
+import type { Repository } from "../../schemas/repositories.schema.js";
 
 
 export async function createRepository(
@@ -44,4 +44,23 @@ export async function listRepos(
         description: repo.description ?? null,
         owner: repo.owner.login,
     }));
+}
+
+export async function getRepository(
+    client: Octokit,
+    owner: string,
+    repo: string,
+): Promise<Repository> {
+    const data = await githubRequest(() => client.repos.get({
+        owner,
+        repo,
+    }));
+
+    return {
+        full_name: data.full_name,
+        url: data.html_url,
+        private: data.private,
+        description: data.description ?? null,
+        owner: data.owner.login,
+    };
 }

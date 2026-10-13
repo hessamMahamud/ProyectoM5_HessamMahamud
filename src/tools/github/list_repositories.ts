@@ -29,6 +29,7 @@ export function registerListRepositories(server: McpServer, githubClient: Github
                 const { type, sort, per_page } = parsed.data;
                 const data = await listRepos(githubClient, type, sort, per_page);
                 return toolSuccess(data);
+                
             } catch (error) {
                 return toolFailure(error);
             }

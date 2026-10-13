@@ -10,7 +10,7 @@ export function registerListIssues(server: McpServer, githubClient: GithubClient
         {
             description: "Lista las issues de un repositorio y excluye pull requests de la respuesta.",
             inputSchema: listIssuesSchema.shape,
-            outputSchema: listIssuesOutputSchema,
+            outputSchema: listIssuesOutputSchema.shape,
         },
         async (args) => {
             const parsed = listIssuesSchema.safeParse(args);
