@@ -198,11 +198,15 @@ Lista repositorios de la cuenta autenticada.
 
 Health check local del servidor. Devuelve `pong` o `pong: mensaje` y no llama a GitHub.
 
-## Tools planificadas y recientemente implementadas
+## Tools adicionales
 
 ### `get_repository`
 
-Tool de solo lectura propuesta para consultar un repositorio mediante `owner` y `repo`, devolviendo su nombre completo, URL, descripción, visibilidad, propietario y rama principal. La especificación de terminación establece que debe ser una tool oficial, pero actualmente [su archivo](./src/tools/github/get_repository.ts) no está registrado en [el índice de tools](./src/tools/index.tools.ts). Por eso no debe considerarse disponible todavía.
+Tool de solo lectura para consultar un repositorio mediante `owner` y `repo`. Devuelve su nombre completo, URL, descripción, visibilidad, propietario y rama principal. Está implementada y registrada en [el índice de tools](./src/tools/index.tools.ts).
+
+Prompt efectivo:
+
+> Consulta `hessamMahamud/wiseArchive` y dime su URL, descripción, visibilidad y rama principal. No modifiques nada.
 
 ### `read_file`
 
@@ -260,16 +264,16 @@ La siguiente matriz relaciona los requisitos del proyecto con la evidencia esper
 | `list_issues` | Tool registrada, paginación y exclusión de pull requests | Implementado |
 | Schemas válidos e inválidos | `src/tests/schemas.test.ts` | Implementado |
 | Octokit mockeado | `src/tests/clients.test.ts` | Implementado |
-| Casos edge | Pull requests, rutas absolutas, paginación y campos opcionales | Parcial; ampliar evidencia si falta algún caso |
-| Errores `401`, `403`, `404`, `422`, rate limit y `5xx` | `src/tests/errors.test.ts` y `src/clients/github/errors.ts` | Implementado en la capa de errores; confirmar cobertura completa |
+| Casos edge | Pull requests, rutas absolutas, paginación y campos opcionales | Parcial; existen casos para pull requests y rutas absolutas, y la paginación está implementada |
+| Errores `401`, `403`, `404`, `422`, rate limit y `5xx` | `src/tests/errors.test.ts` y `src/clients/github/errors.ts` | Implementado en la capa de errores; la suite cubre directamente `401`, `404` y `422` |
 | Mensajes legibles para el LLM | `src/tools/github/result.ts` y tests de errores | Implementado |
-| Configuración MCP | `.mcp.json`, `dist/index.js` y descubrimiento desde el Host | Verificado después de compilar |
+| Configuración MCP | `.mcp.json`, `dist/index.js` y descubrimiento desde el Host | Configuración presente y compilación verificada |
 | README, prompts y arquitectura | Este README y diagrama Mermaid | Implementado |
 | Guía del PAT | Sección “GitHub Personal Access Token” | Implementado |
-| `get_repository` | `src/tools/github/get_repository.ts` | Pendiente |
+| `get_repository` | `src/tools/github/get_repository.ts`, cliente, schemas y registro | Implementado; ampliar tests dedicados si se requiere evidencia específica |
 | `read_file` y resolución de `sha` | [`docs/specs/spec-read-file.md`](./docs/specs/spec-read-file.md), cliente, schema y tests mockeados | Implementado |
 
-La suite mínima exigida por el prompt es de ocho tests unitarios. La cantidad exacta y el resultado de la última ejecución deben comprobarse con `npm test`; esta documentación no reemplaza esa ejecución.
+La suite actual tiene 26 tests en 4 archivos y pasa con `npm test`. Supera el mínimo exigido de ocho tests unitarios. La cobertura específica de `get_repository` todavía puede ampliarse con tests dedicados de schema, cliente y handler; su implementación y registro ya están completados.
 
 ## Documentación del uso de IA
 
@@ -285,6 +289,6 @@ La bitácora y los criterios utilizados durante la creación del proyecto están
 
 ## Estado del proyecto
 
-La base del servidor, las tools principales, la validación y los tests unitarios están implementados. Actualmente están registradas `create_repository`, `create_issue`, `create_commit`, `list_issues`, `list_repositories`, `read_file` y `ping`. La documentación de terminación se encuentra en [`docs/specs/spec-terminacion.md`](./docs/specs/spec-terminacion.md); `get_repository` continúa especificada pero pendiente.
+La base del servidor, las tools, la validación y los tests unitarios están implementados. Actualmente están registradas `create_repository`, `get_repository`, `create_issue`, `create_commit`, `list_issues`, `list_repositories`, `read_file` y `ping`. La configuración MCP apunta a `dist/index.js` y la compilación fue verificada con `npm run build`.
 
-Permanece pendiente `get_repository` —requerida por la especificación de terminación—. `read_file` ya está registrada, devuelve contenido UTF-8 y `sha`, y cuenta con cobertura de validación, cliente, errores y respuesta MCP mediante mocks.
+No queda pendiente ninguna tool del alcance funcional confirmado. `get_repository` es de solo lectura, está registrada y devuelve la información normalizada del repositorio, incluida la rama principal. `read_file` también está registrada, devuelve contenido UTF-8 y `sha`, y cuenta con cobertura de validación, cliente, errores y respuesta MCP mediante mocks. Como mejora de evidencia, pueden añadirse tests dedicados para `get_repository` y una prueba opcional de descubrimiento desde el Host.
