@@ -1,6 +1,5 @@
 import { Octokit } from "@octokit/rest";
 import { env } from "../config/env.js";
-import { verifyAuth } from "./github/auth.js";
 
 
 export type GithubClient = Octokit;
