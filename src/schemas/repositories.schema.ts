@@ -56,3 +56,26 @@ export const listRepositoriesOutputSchema = z.object({
     ok: z.literal(true),
     data: z.array(RepositorySchema),
 });
+
+export const getRepositorySchema = z.object({
+    owner: z
+        .string()
+        .min(1, "El owner no puede estar vacío")
+        .max(39, "El owner no puede superar los 39 caracteres.")
+        .regex(/^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9]))*$/, {
+            message: "El owner solo admite letras, números y guiones simples, sin empezar ni terminar en guion.",
+        }),
+    repo: z
+        .string()
+        .min(1, "El nombre del repositorio no puede estar vacío.")
+        .max(100, "El nombre del repositorio no puede superar los 100 caracteres.")
+        .regex(/^[a-zA-Z0-9._-]+$/, {
+            message: "El repositorio solo admite letras, números, guiones, guiones bajos y puntos.",
+        })
+        .describe("Nombre del repositorio (ej: hello-world)"),
+})
+
+export const getRepositoryOutputSchema = z.object({
+    ok: z.literal(true),
+    data: RepositorySchema,
+})

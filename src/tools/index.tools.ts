@@ -7,6 +7,7 @@ import { registerListIssues } from "./github/list_issues.js";
 import { registerListRepositories } from "./github/list_repositories.js";
 import { registerReadFile } from "./github/read_file.js";
 import { createGithubClient, type GithubClient } from "../clients/github.client.js";
+import { registerGetRepository } from "./github/get_repository.js";
 
 export function registerAllTools(server: McpServer, githubClient: GithubClient = createGithubClient()) {
     registerCreateRepository(server, githubClient);
@@ -15,5 +16,6 @@ export function registerAllTools(server: McpServer, githubClient: GithubClient =
     registerListIssues(server, githubClient);
     registerListRepositories(server, githubClient);
     registerReadFile(server, githubClient);
+    registerGetRepository(server, githubClient);
     registerPing(server);
 }
