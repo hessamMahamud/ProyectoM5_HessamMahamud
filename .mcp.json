@@ -1,12 +1,12 @@
 {
-    "mcpServers": {
-        "automateHub-mcp-server": {
-            "type": "stdio",
-            "command": "node",
-            "args": [
-                "dist/index.js"
-            ],
-            "env": ".env"
-        }
+  "mcpServers": {
+    "automateHub-mcp-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+          "dist/index.js"
+      ],
+      "env": ".env"
     }
+  }
 }
