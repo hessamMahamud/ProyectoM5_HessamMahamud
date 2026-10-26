@@ -1,35 +1,35 @@
 {
-    "name": "proyectom5_hessammahamud",
-    "version": "1.0.0",
-    "description": "",
-    "main": "dist/index.js",
-    "scripts": {
-        "dev": "tsx watch src/index.ts --outDir dist",
-        "build": "tsc -p tsconfig.json",
-        "start": "node dist/index.js",
-        "typecheck": "tsc -p tsconfig.json --noEmit",
-        "test": "vitest run src/tests",
-        "circularDep": "npx madge --circular --extensions ts src/"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "type": "module",
-    "dependencies": {
-        "@modelcontextprotocol/inspector": "^2.8.0",
-        "@modelcontextprotocol/sdk": "^1.31.0",
-        "@octokit/rest": "^22.0.1",
-        "dotenv": "^18.0.5",
-        "zod": "^4.6.5"
-    },
-    "devDependencies": {
-        "@types/node": "^26.6.3",
-        "tsx": "^4.23.15",
-        "typescript": "^7.0.2",
-        "vitest": "^5.0.3"
-    },
-    "allowScripts": {
-        "esbuild@0.28.2": true,
-        "@modelcontextprotocol/inspector@2.10.1": true
-    }
+  "name": "proyectom5_hessammahamud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts --outDir dist",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run src/tests",
+    "circularDep": "npx madge --circular --extensions ts src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/inspector": "^2.8.0",
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "@octokit/rest": "^22.0.1",
+    "dotenv": "^18.0.5",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "@modelcontextprotocol/inspector@2.10.1": true
+  }
 }
